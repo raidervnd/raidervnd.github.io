@@ -1,7 +1,7 @@
 var GAME = {
     width: 1280,
     height: 703,
-    fps: 1000 / 60,
+    fps: 1000 / 80,
     canvasContext: null,
     background: new Image(),
     screenSaver: true,
