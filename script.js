@@ -1,7 +1,7 @@
 var GAME = {
     width: 1280,
     height: 703,
-    fps: 1000 / 80,
+    fps: 1000 / 60,
     canvasContext: null,
     background: new Image(),
     screenSaver: true,
@@ -102,7 +102,7 @@ function drawWon() {
     GAME.canvasContext.fillText('YOU DID IT!', 400, 200);
     GAME.canvasContext.font = "40px serif";
     GAME.canvasContext.fillText('YOU CAUGHT 40 APPLES!', 400, 250);
-    GAME.canvasContext.fillText('YOU ARE BLESSED FOR A SEMESTER FROM NOW!!!', 180, 300);
+    GAME.canvasContext.fillText('YOU ARE BLESSED FOR THE SEMESTER FROM NOW!!!', 180, 300);
     GAME.canvasContext.font = "30px serif";
     GAME.canvasContext.fillText('CLICK TO RESTART..', 470, 630);
     GAME.canvasContext.fillText('Missed: ' + COPY.missed, 1100, 50);
@@ -153,11 +153,13 @@ function update() {
     //проверяем на столкновение яблока с корзинкой
     var playerCollision = _appleHasCollisionWithPlayer(APPLE, PLAYER);
     if (playerCollision) {
+        GAME.canvasContext.fillText('+', 250, 50);
         APPLE.x = getRandomInteger();
         APPLE.y = 0;
         score += 1;
         if (score > record) 
             record = score;
+        
     }
     //проверяем на столькновение яблока с нижней стенкой
     if (APPLE.y + APPLE.height > GAME.height) {
