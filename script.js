@@ -153,7 +153,6 @@ function update() {
     //проверяем на столкновение яблока с корзинкой
     var playerCollision = _appleHasCollisionWithPlayer(APPLE, PLAYER);
     if (playerCollision) {
-        GAME.canvasContext.fillText('+', 250, 50);
         APPLE.x = getRandomInteger();
         APPLE.y = 0;
         score += 1;
