@@ -9,6 +9,7 @@ var GAME = {
     imgWidth: 280,
     imgHeight: 190,
     won: false,
+    lose: false,
 }
 
 var APPLE = {
@@ -17,7 +18,7 @@ var APPLE = {
     width: 45, 
     height: 50,
     background: new Image(),
-    yDirection: 7,
+    speed: 7,
 }
 
 var PLAYER = {
@@ -25,9 +26,6 @@ var PLAYER = {
     y: 600,
     width: 120,
     height: 70,
-    color: "green",
-    yDirection: 0,
-    speed: 40,
     background: new Image(),
 }
 
@@ -60,15 +58,16 @@ function init() {
 }
 
 function play() {
+    if (GAME.screenSaver) 
+        drawScreenSaver();
     if (GAME.won) 
         drawWon();
-    else 
-        if (GAME.screenSaver) 
-        drawScreenSaver();
-        else {
-            draw();
-            update();
-        }
+    if (GAME.lose) 
+        drawLose();
+    if (!GAME.won && !GAME.lose && !GAME.screenSaver) {
+        draw();
+        update();
+    }       
 }
 
 function drawScreenSaver() {
@@ -90,7 +89,6 @@ function drawScreenSaver() {
     GAME.canvasContext.fillText('CLICK TO START..', 490, 630);
     addEventListener("mousedown", () => {
         GAME.screenSaver = false;
-        GAME.won = false;
     })
 }
 
@@ -100,19 +98,36 @@ function drawWon() {
     GAME.canvasContext.drawImage(GAME.background, 0, 0, GAME.width, GAME.height); 
     GAME.canvasContext.drawImage(GAME.image, 450, 400, GAME.imgWidth, GAME.imgHeight); 
     //отрисовываем текст
-    // GAME.canvasContext.fillStyle = "#FFE4B5";
     GAME.canvasContext.font = "80px serif";
     GAME.canvasContext.fillText('YOU DID IT!', 400, 200);
     GAME.canvasContext.font = "40px serif";
     GAME.canvasContext.fillText('YOU CAUGHT 40 APPLES!', 400, 250);
     GAME.canvasContext.fillText('AND NOW YOU CAN LIVE YOU LIFE PEACEFULLY!', 200, 300);
     GAME.canvasContext.font = "30px serif";
-    GAME.canvasContext.fillText('CLICK TO TRY AGAIN..', 450, 630);
+    GAME.canvasContext.fillText('CLICK TO RESTART..', 470, 630);
     GAME.canvasContext.fillText('Missed: ' + COPY.missed, 1100, 50);
     addEventListener("mousedown", () => {
         GAME.won = false;
     })
+}
 
+function drawLose() {
+    //отрисовываем задний фон
+    GAME.canvasContext.clearRect(0, 0, GAME.width, GAME.height);
+    GAME.canvasContext.drawImage(GAME.background, 0, 0, GAME.width, GAME.height); 
+    GAME.canvasContext.drawImage(GAME.image, 450, 400, GAME.imgWidth, GAME.imgHeight); 
+    //отрисовываем текст
+    GAME.canvasContext.font = "80px serif";
+    GAME.canvasContext.fillText('PLEASE TRY AGAIN!', 260, 200);
+    GAME.canvasContext.font = "40px serif";
+    GAME.canvasContext.fillText('YOU MISSED MORE THAN 5 APPLES!', 300, 250);
+    GAME.canvasContext.fillText('CATCH 40 APPLES AND MISS LESS THAN 5 APPLES', 160, 300);
+    GAME.canvasContext.font = "30px serif";
+    GAME.canvasContext.fillText('CLICK TO TRY AGAIN..', 450, 630);
+    GAME.canvasContext.fillText('Score: ' + COPY.score, 1100, 50);
+    addEventListener("mousedown", () => {
+        GAME.lose = false;
+    })
 }
 
 function draw() {
@@ -136,7 +151,7 @@ function draw() {
 
 function update() {
     //проверяем на столкновение яблока с корзинкой
-    var playerCollision = _ballHasCollisionWithPlayer(APPLE, PLAYER);
+    var playerCollision = _appleHasCollisionWithPlayer(APPLE, PLAYER);
     if (playerCollision) {
         APPLE.x = getRandomInteger();
         APPLE.y = 0;
@@ -153,26 +168,27 @@ function update() {
 
     //провышаем уровень
     if (score == 5) {
-        APPLE.yDirection = 8;
+        APPLE.speed = 8;
         level = 2;
     } 
     if (score == 10) {
-        APPLE.yDirection = 9;
+        APPLE.speed = 9;
         level = 3;
     }
     if (score == 15) {
-        APPLE.yDirection = 10;
+        APPLE.speed = 10;
         level = 4;
     }
     if (score == 20) {
-        APPLE.yDirection = 11;
+        APPLE.speed = 11;
         level = 5;       
     }
     if (missed == 6) {
-        GAME.screenSaver = true;
+        GAME.lose = true;
         if (score > record) 
             record = score;
-        APPLE.yDirection = 7;
+        COPY.score = score;
+        APPLE.speed = 7;
         missed = 0;
         score = 0;
         level = 1;
@@ -180,18 +196,17 @@ function update() {
 
     if (score == 40) {
         GAME.won = true;
-        GAME.screenSaver = true;
         COPY.score = score;
         COPY.missed = missed;
         score = 0;
         missed = 0;
         level = 1;
-        APPLE.yDirection = 7;
+        APPLE.speed = 7;
     }
-    APPLE.y += APPLE.yDirection;
+    APPLE.y += APPLE.speed;
 }
 
-function _ballHasCollisionWithPlayer(apple, player) {
+function _appleHasCollisionWithPlayer(apple, player) {
     var xCollision = (apple.x + apple.width > player.x) && (apple.x < player.x + player.width);
     var yCollision = (apple.y + apple.height < player.height + player.y) && (apple.y >= player.y)
     return xCollision && yCollision;
