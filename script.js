@@ -84,7 +84,7 @@ function drawScreenSaver() {
     GAME.canvasContext.font = "80px serif";
     GAME.canvasContext.fillText('CATCH FALLING APPLES' , 200, 200);
     GAME.canvasContext.font = "40px serif";
-    GAME.canvasContext.fillText('FOR MENTAL HEALTH' , 450, 300);
+    GAME.canvasContext.fillText('FOR BLESSING' , 450, 300);
     GAME.canvasContext.font = "30px serif";
     GAME.canvasContext.fillText('CLICK TO START..', 490, 630);
     addEventListener("mousedown", () => {
@@ -102,7 +102,7 @@ function drawWon() {
     GAME.canvasContext.fillText('YOU DID IT!', 400, 200);
     GAME.canvasContext.font = "40px serif";
     GAME.canvasContext.fillText('YOU CAUGHT 40 APPLES!', 400, 250);
-    GAME.canvasContext.fillText('AND NOW YOU CAN LIVE YOU LIFE PEACEFULLY!', 200, 300);
+    GAME.canvasContext.fillText('YOU ARE BLESSED FOR A SEMESTER FROM NOW!!!', 180, 300);
     GAME.canvasContext.font = "30px serif";
     GAME.canvasContext.fillText('CLICK TO RESTART..', 470, 630);
     GAME.canvasContext.fillText('Missed: ' + COPY.missed, 1100, 50);
